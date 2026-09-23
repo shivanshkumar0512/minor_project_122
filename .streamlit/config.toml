@@ -1,0 +1,33 @@
+[theme]
+base = "dark"
+primaryColor = "#5B8CFF"
+backgroundColor = "#0B0F17"
+secondaryBackgroundColor = "#141B2A"
+textColor = "#E6EAF2"
+borderColor = "#232C3F"
+redColor = "#EF4444"
+orangeColor = "#F59E0B"
+greenColor = "#22C55E"
+blueColor = "#5B8CFF"
+baseRadius = "10px"
+showSidebarBorder = true
+font = "Inter:https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap, sans-serif"
+codeFont = "JetBrains Mono:https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap, monospace"
+
+[theme.sidebar]
+backgroundColor = "#0E1320"
+secondaryBackgroundColor = "#161E2F"
+
+[client]
+toolbarMode = "viewer"
+showErrorDetails = "none"
+showSidebarNavigation = false
+
+[server]
+headless = true
+maxUploadSize = 5
+fileWatcherType = "none"
+runOnSave = false
+
+[browser]
+gatherUsageStats = false

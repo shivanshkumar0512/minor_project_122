@@ -1,0 +1,86 @@
+{
+  "rss_start_mb": 192.5703125,
+  "rss_after_imports_mb": 262.87890625,
+  "domains": {
+    "finance": {
+      "bundle_mb": 2.46,
+      "load_s": 0.15,
+      "score_one_with_stability_ms": 56.6,
+      "rss_after_mb": 289.8
+    },
+    "healthcare": {
+      "bundle_mb": 4.0,
+      "load_s": 0.19,
+      "score_one_with_stability_ms": 127.4,
+      "rss_after_mb": 320.8
+    },
+    "recruitment": {
+      "bundle_mb": 2.51,
+      "load_s": 0.22,
+      "score_one_with_stability_ms": 97.6,
+      "rss_after_mb": 320.8
+    }
+  },
+  "trees_tradeoff": {
+    "finance": {
+      "100": {
+        "accuracy": 0.9813,
+        "roc_auc": 0.9969,
+        "model_mb": 0.3,
+        "shap_ms": 1.25
+      },
+      "200": {
+        "accuracy": 0.9824,
+        "roc_auc": 0.9975,
+        "model_mb": 0.59,
+        "shap_ms": 2.79
+      },
+      "300": {
+        "accuracy": 0.9824,
+        "roc_auc": 0.9975,
+        "model_mb": 0.86,
+        "shap_ms": 3.36
+      }
+    },
+    "healthcare": {
+      "100": {
+        "accuracy": 0.7412,
+        "roc_auc": 0.8051,
+        "model_mb": 0.91,
+        "shap_ms": 4.62
+      },
+      "200": {
+        "accuracy": 0.7447,
+        "roc_auc": 0.8072,
+        "model_mb": 1.77,
+        "shap_ms": 9.26
+      },
+      "300": {
+        "accuracy": 0.7459,
+        "roc_auc": 0.8077,
+        "model_mb": 2.67,
+        "shap_ms": 13.1
+      }
+    },
+    "recruitment": {
+      "100": {
+        "accuracy": 0.8299,
+        "roc_auc": 0.7746,
+        "model_mb": 0.42,
+        "shap_ms": 2.42
+      },
+      "200": {
+        "accuracy": 0.8231,
+        "roc_auc": 0.7778,
+        "model_mb": 0.84,
+        "shap_ms": 5.48
+      },
+      "300": {
+        "accuracy": 0.8299,
+        "roc_auc": 0.7792,
+        "model_mb": 1.27,
+        "shap_ms": 9.28
+      }
+    }
+  }
+}

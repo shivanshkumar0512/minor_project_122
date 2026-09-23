@@ -1,0 +1,16 @@
+# Runtime dependencies - pinned (Python 3.11).  Install: pip install -r requirements.txt
+streamlit==1.64.0
+plotly==7.1.0
+scikit-learn==1.9.1
+shap==0.51.0
+numpy==2.4.6
+pandas==3.0.6
+joblib==1.6.0
+# pinned transitive dependencies of shap / scikit-learn (reproducible SHAP + model loading)
+scipy==1.17.1
+numba==0.67.0
+llvmlite==0.49.0
+threadpoolctl==3.7.0
+slicer==0.0.8
+cloudpickle==3.1.2
+tqdm==4.70.1

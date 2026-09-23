@@ -1,0 +1,133 @@
+{
+  "model": {
+    "finance": {
+      "accuracy": 0.9824,
+      "precision": 0.9873,
+      "recall": 0.9659,
+      "f1": 0.9765,
+      "roc_auc": 0.9975
+    },
+    "healthcare": {
+      "accuracy": 0.7447,
+      "precision": 0.779,
+      "recall": 0.68,
+      "f1": 0.7261,
+      "roc_auc": 0.8101
+    },
+    "recruitment": {
+      "accuracy": 0.8333,
+      "precision": 0.4167,
+      "recall": 0.1064,
+      "f1": 0.1695,
+      "roc_auc": 0.7873
+    }
+  },
+  "attack": {
+    "success": 179,
+    "total": 180,
+    "mean_abs_dp": {
+      "finance": 0.027,
+      "healthcare": 0.031,
+      "recruitment": 0.032
+    }
+  },
+  "space_auc": {
+    "finance": {
+      "explanation": 0.7366,
+      "input": 0.6153
+    },
+    "healthcare": {
+      "explanation": 0.7295,
+      "input": 0.8119
+    },
+    "recruitment": {
+      "explanation": 0.6349,
+      "input": 0.5577
+    }
+  },
+  "stability_auc": {
+    "finance": {
+      "fixed": 0.6114,
+      "absolute": 0.5636,
+      "m_ref": 0.152
+    },
+    "healthcare": {
+      "fixed": 0.2619,
+      "absolute": 0.7005,
+      "m_ref": 0.567
+    },
+    "recruitment": {
+      "fixed": 0.5142,
+      "absolute": 0.5758,
+      "m_ref": 0.243
+    },
+    "range": {
+      "fixed": 0.3495,
+      "absolute": 0.1369
+    }
+  },
+  "signal_auc": {
+    "finance": {
+      "confidence": 0.707,
+      "anomaly": 0.658,
+      "stability": 0.579,
+      "trust_equal": 0.635,
+      "trust_fitted": 0.621
+    },
+    "healthcare": {
+      "confidence": 0.52,
+      "anomaly": 0.82,
+      "stability": 0.721,
+      "trust_equal": 0.87,
+      "trust_fitted": 0.851
+    },
+    "recruitment": {
+      "confidence": 0.591,
+      "anomaly": 0.547,
+      "stability": 0.645,
+      "trust_equal": 0.614,
+      "trust_fitted": 0.635
+    }
+  },
+  "fitted_weights": {
+    "finance": [
+      0.35,
+      1.042,
+      0.548
+    ],
+    "healthcare": [
+      -0.336,
+      2.313,
+      1.629
+    ],
+    "recruitment": [
+      -0.108,
+      -0.016,
+      1.164
+    ]
+  },
+  "feedback": {
+    "detection_before": 0.1,
+    "detection_after": 0.4,
+    "fpr_before": 0.05,
+    "fpr_after": 0.13
+  },
+  "contamination": {
+    "levels": [
+      0.0,
+      0.018,
+      0.059,
+      0.176,
+      0.468,
+      0.995
+    ],
+    "auc": [
+      0.805,
+      0.8043,
+      0.8027,
+      0.802,
+      0.7937,
+      0.7827
+    ]
+  }
+}
