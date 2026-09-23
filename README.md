@@ -91,6 +91,7 @@ scripts/
   run_experiments.py  reproduce the paper → results/experiments.json
   measure.py          memory / load-time / tree-count trade-off → results/deployment_metrics.json
   healthcheck.py      artifacts load, scoring works, DB writable (exit code)
+  simulate_monitor.py spike / drift monitor evaluation → results/monitor_simulation.json
 app.py, app_pages/    Streamlit multipage app (st.navigation), ui/ = design system + shared state
 assets/style.css      the single injected stylesheet; .streamlit/config.toml = theme
 ```
@@ -110,6 +111,7 @@ python scripts/train_all.py            # ~6 min on 4 CPU cores → artifacts/<do
 python scripts/run_experiments.py      # ~9 min → results/experiments.json, results/paper_reference.json
 python scripts/measure.py              # optional: memory and tree-count trade-off
 pytest -q                              # 32 tests
+python scripts/simulate_monitor.py     # optional: spike/drift monitor evaluation (~20 min)
 ```
 
 ## Library API
@@ -259,8 +261,10 @@ examiners. The dark theme is the default; there's a light theme toggle in the si
    appears; (4) *Confirm attack*; (5) the threshold recalibrates (0.419 → 0.674, held-out detection +13 pp, FPR cost
    shown).
 2. *Attack Simulator*: launch a few attacks. Some are caught, some slip through; explain triage vs automatic rejection.
-3. *Sidebar → Healthcare*, *Live Monitor → Start*, then *Inject burst ×20* (red spike shading, toast), then
-   *Start drift* on systolic/diastolic BP (violet drift shading once the shift is consistent).
+3. *Home → Healthcare card*, *Live Monitor → Start* (Fast): watch the "Attack flagged" toasts, then *Start drift*
+   on systolic/diastolic BP. After ~30–60 s the state badge turns **Gradual drift** and the chart shades violet.
+   *Inject burst ×20* can produce a red **spike** state, but not every time (see the simulation table: detection
+   is deliberately conservative).
 4. *Review Queue*: confirm or approve a few items and watch the threshold, detection and FPR deltas.
 5. *Analytics*: the reproduced tables vs the paper, including the stability inversion and the recruitment finding.
 
@@ -365,9 +369,22 @@ monitor spike detection, the paper's data shapes (1,508 cardio rows dropped, 7 c
   positives), so confirmed attacks can move the threshold. It never changes the baseline.
 * Contamination "level" = wrongly cleared attacks **appended** to the baseline, relative to baseline size.
 * The Live Monitor's temporal detector (`seaf/drift.py`) is an extension the paper names as future work. It
-  flags a *spike* when the recent flag rate or mean trust departs abruptly from the preceding window, and *drift*
-  when the mean of standardised inputs moves consistently from where the stream started. Random-sign attack edits
-  average out; population drift does not.
+  flags a *spike* when the recent flag rate jumps or recent trust is significantly lower than in the preceding
+  window (one-sided Mann-Whitney rank test, which stays calibrated for skewed trust distributions). It flags *drift*
+  when the mean of standardised inputs moves consistently away from where the stream started. States must hold for
+  3 consecutive decisions. Simulation (`python scripts/simulate_monitor.py` → `results/monitor_simulation.json`;
+  4 seeds × 260 decisions per scenario):
+
+  | Domain | False spike (clean runs) | False drift (clean runs) | Burst of 20 detected | Drift detected |
+  |---|---|---|---|---|
+  | Finance | 0/4 | 0/4 | 2/4 | 4/4 |
+  | Healthcare | 0/4 | 1/4 | 1/4 | 4/4 |
+  | Recruitment | 1/4 | 0/4 | 0/4 | 4/4 |
+
+  Drift detection is reliable. Burst detection is **conservative**: it is limited by how much lower an attacked
+  record's trust is on average (finance −0.06, healthcare −0.16, recruitment ≈0), so individual "attack flagged"
+  alerts remain the primary signal. Earlier versions that compared against baseline trust raised false spikes,
+  because baseline trust is in-sample for the Isolation Forest; the self-referencing rank test fixed that.
 
 ## Limitations
 * **Detection is moderate** (paired AUC ≈ 0.64–0.82 where it works, ≈ 0.5 for recruitment with a balanced model).
@@ -376,8 +393,8 @@ monitor spike detection, the paper's data shapes (1,508 cardio rows dropped, 7 c
   Detection quality depends on the protected model, as the paper notes.
 * One attack family (unaware black-box random search). An adaptive attacker that also minimises the anomaly score
   was not evaluated. The explainer is assumed honest (no scaffolding defence).
-* Burst detection in the monitor is only as good as per-record separation: clear in healthcare, weak in finance,
-  absent in recruitment.
+* Burst detection in the monitor is only as good as per-record separation (≈ 1 in 3 simulated 20-record bursts
+  caught overall, never in recruitment); drift is detected reliably.
 * Small evaluation samples (60 attacks per domain) give wide CIs; see the bootstrap and 5-seed spreads above.
 * Free-tier hosting: ephemeral state, cold starts after sleep, and one shared audit DB for all visitors.
 * TreeSHAP restricts the shipped models to tree ensembles; the library's interfaces are model-agnostic in principle.
