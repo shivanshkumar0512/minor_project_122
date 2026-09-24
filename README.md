@@ -92,6 +92,7 @@ scripts/
   measure.py          memory / load-time / tree-count trade-off → results/deployment_metrics.json
   healthcheck.py      artifacts load, scoring works, DB writable (exit code)
   simulate_monitor.py spike / drift monitor evaluation → results/monitor_simulation.json
+  deploy_hf.py        create / update the Hugging Face Space (needs HF_TOKEN)
 app.py, app_pages/    Streamlit multipage app (st.navigation), ui/ = design system + shared state
 assets/style.css      the single injected stylesheet; .streamlit/config.toml = theme
 ```
@@ -335,6 +336,13 @@ of RAM, `python scripts/train_all.py --trees 100` is the lever.
    turns green.
 4. Optional: *Settings → Sleep time* stays at the free default (48 h). After a sleep, the first visitor waits for
    a cold start (~10–30 s on HF).
+
+**One-command alternative** (no git remote needed): with a write-scoped token in the environment,
+```bash
+export HF_TOKEN=...            # never commit this
+python scripts/deploy_hf.py --space <your-user>/seaf      # creates the Docker Space if missing, uploads ~15 MB
+python scripts/deploy_hf.py --dry-run                     # just list what would be uploaded
+```
 
 Local equivalent: `docker build -t seaf . && docker run -p 7860:7860 seaf` → <http://localhost:7860>.
 
