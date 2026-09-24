@@ -346,6 +346,18 @@ python scripts/deploy_hf.py --dry-run                     # just list what would
 
 Local equivalent: `docker build -t seaf . && docker run -p 7860:7860 seaf` → <http://localhost:7860>.
 
+### C. In-browser build (static, no server)
+The same models also run entirely in the browser: `web/src/engine.js` is a JavaScript port of the library.
+It covers TreeSHAP (path-dependent, as in shap), Isolation Forest scoring, stability (numpy's PCG64 re-implemented
+so the jitter is bit-identical), trust, attacks, recalibration and the drift monitor. p, SHAP and anomaly scores
+match the Python library to ~1e-15, and trust to < 1e-4 (`node web/tests/verify_engine.js <ref.json>`).
+```bash
+python scripts/export_web.py    # artifacts -> web/data/<domain>.json (3-8 MB each)
+python scripts/build_web.py     # -> web/dist/index.html (+ data/); serve web/dist with any static host
+```
+The page keeps the audit log and review queue in memory for each viewer. CSV upload and baseline refit need the
+Python app.
+
 ### B. Streamlit Community Cloud, fallback
 1. Push the repository to GitHub (public, or private with the Streamlit app authorised).
 2. Go to <https://share.streamlit.io> → **Create app** → pick the repo/branch, **Main file path** `app.py`.

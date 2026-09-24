@@ -11,3 +11,7 @@ runtime/
 .DS_Store
 .idea/
 .vscode/
+
+# in-browser build output (regenerate: scripts/export_web.py + scripts/build_web.py)
+web/data/
+web/dist/
